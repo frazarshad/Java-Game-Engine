@@ -5,32 +5,41 @@
  */
 package components;
 
-import com.sun.javafx.runtime.SystemProperties;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import javax.imageio.ImageIO;
 
 /**
  *
  * @author Fraz
  */
 public class GameObject {
-    private BufferedImage sprite;
     
-    public GameObject(String spriteLocation) {
-        try {
-            sprite = ImageIO.read(new File(spriteLocation));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private Sprite sprite;
+    private int x;
+    private int y;
+    
+    public GameObject() {
+        sprite = new Sprite();
+        x = y = 25;
+    }
+    
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    public int getX() {
+        return x;
+    }
+    
+    public int getY() {
+        return y;
     }
     
     public BufferedImage getSprite() {
-        return sprite;
+        return sprite.getSprite();
+    }
+    
+    public void setSprite(String spriteLocation) {
+        sprite.setSprite(spriteLocation);
     }
 }
