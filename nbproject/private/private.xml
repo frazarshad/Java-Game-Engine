@@ -3,10 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/engine/Main.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/game/Player.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/GameObject.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/Animation.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/engine/RenderEngine.java</file>
-            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/Sprite.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/AnimationController.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/game/Background.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/SpriteRenderer.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/debugtools/FrameRate.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/game/Main.java</file>
         </group>
     </open-files>
 </project-private>

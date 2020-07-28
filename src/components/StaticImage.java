@@ -14,22 +14,20 @@ import javax.imageio.ImageIO;
  *
  * @author Fraz
  */
-public class Sprite {
+public class StaticImage implements SpriteRenderer {
+
     private BufferedImage sprite;
-//    
-//    public Sprite(String spriteLocation) {
-//        setSprite(spriteLocation);
-//    }
-    
-    public BufferedImage getSprite() {
-        return sprite;
-    } 
-    
-    public void setSprite(String spriteLocation) {
+
+    public StaticImage(String location) {
         try {
-            sprite = ImageIO.read(new File(spriteLocation));
+            sprite = ImageIO.read(new File(location));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public BufferedImage getSprite() {
+        return sprite;
     }
 }

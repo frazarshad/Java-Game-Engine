@@ -12,34 +12,31 @@ import java.awt.image.BufferedImage;
  * @author Fraz
  */
 public class GameObject {
-    
-    private Sprite sprite;
-    private int x;
-    private int y;
-    
-    public GameObject() {
-        sprite = new Sprite();
-        x = y = 25;
-    }
-    
-    public void setLocation(int x, int y) {
+    private SpriteRenderer spriteRenderer = null;
+    private int x = 0;
+    private int y = 0;
+        
+    public final void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
     }
     
-    public int getX() {
+    public final int getX() {
         return x;
     }
     
-    public int getY() {
+    public final int getY() {
         return y;
     }
+
+    public final BufferedImage getSprite() {
+        return spriteRenderer.getSprite();
+    } 
     
-    public BufferedImage getSprite() {
-        return sprite.getSprite();
+    public final void setSpriteRenderer(SpriteRenderer spriteRenderer) {
+        this.spriteRenderer = spriteRenderer;
     }
     
-    public void setSprite(String spriteLocation) {
-        sprite.setSprite(spriteLocation);
-    }
+    public void update() {}
+    
 }

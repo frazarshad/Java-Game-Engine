@@ -89,10 +89,12 @@ public class RenderEngine extends JFrame implements Runnable {
     private void render(Graphics graphics) {
         Graphics2D graphics2d = (Graphics2D) graphics;
         gameObjects.forEach((gameObject) -> {
-            graphics2d.drawImage(gameObject.getSprite(),
+            graphics2d.drawImage(
+                    gameObject.getSprite(),
                     gameObject.getX(),
                     gameObject.getY(),
-                    this);
+                    this
+            );
         });
         
         if (debugEnabled) {
