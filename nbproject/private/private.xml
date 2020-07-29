@@ -5,12 +5,11 @@
         <group>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/game/Player.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/GameObject.java</file>
-            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/Animation.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/engine/RenderEngine.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/AnimationController.java</file>
-            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/game/Background.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/SpriteRenderer.java</file>
-            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/debugtools/FrameRate.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/KeyReader.java</file>
+            <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/components/StaticImage.java</file>
             <file>file:/C:/Users/Fraz/Documents/NetBeansProjects/Engine/src/game/Main.java</file>
         </group>
     </open-files>

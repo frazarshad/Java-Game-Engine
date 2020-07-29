@@ -6,6 +6,7 @@
 package engine;
 
 import components.GameObject;
+import components.KeyReader;
 import debugtools.FrameRate;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -19,7 +20,7 @@ import javax.swing.JFrame;
  *
  * @author Fraz
  */
-public class RenderEngine extends JFrame implements Runnable {
+public final class RenderEngine extends JFrame implements Runnable {
     
     // Variables to manage state
     private static RenderEngine self = null; // for Singleton Pattern
@@ -30,12 +31,12 @@ public class RenderEngine extends JFrame implements Runnable {
     // Varaible to manage debugging tools
     private boolean debugEnabled = true; // Let the end user configure this 
                                         // during runtime
-    FrameRate frameRate;
+    private FrameRate frameRate;
 
     // Variable to manage gamedata
     private final ArrayList<GameObject> gameObjects; // This is a list of all
                                         // gameobjects that are to be rendered
-
+    private KeyReader keyReader;
     
     public static RenderEngine createEngine() {
         if (self == null) {
@@ -54,19 +55,29 @@ public class RenderEngine extends JFrame implements Runnable {
         }
     }
     
+    @Override
     protected void finalize () {
         self = null;
     }
 
     public void addGameObject(GameObject obj) {
+        obj.setEngine(this);
         gameObjects.add(obj);
     }
 
+    public void setDebug(boolean val) {
+        this.debugEnabled = val;
+    }
+    
+    public KeyReader getKeyReader() {
+        return keyReader;
+    }
+    
     public void setUpEngine() {
 
         Canvas canvas = new Canvas();
         canvas.setSize(320, 240);
-        canvas.setBackground(Color.red);
+        canvas.setBackground(Color.white);
         canvas.setIgnoreRepaint(true);
         
         this.getContentPane().add(canvas);
@@ -75,13 +86,16 @@ public class RenderEngine extends JFrame implements Runnable {
         canvas.createBufferStrategy(DISPOSE_ON_CLOSE);
         buffer = canvas.getBufferStrategy();
 
-
         this.setTitle("Game");
         this.setIgnoreRepaint(true);
         this.setSize(640, 480);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Adding in the keylistener
+        keyReader = KeyReader.createKeyReader();
+        this.addKeyListener(keyReader);
+        
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -89,6 +103,7 @@ public class RenderEngine extends JFrame implements Runnable {
     private void render(Graphics graphics) {
         Graphics2D graphics2d = (Graphics2D) graphics;
         gameObjects.forEach((gameObject) -> {
+            gameObject.update(); // Running update before drawing each frame
             graphics2d.drawImage(
                     gameObject.getSprite(),
                     gameObject.getX(),
@@ -105,6 +120,11 @@ public class RenderEngine extends JFrame implements Runnable {
     @Override
     public void run() {
         running = true;
+        // Running start function for each gameobject once
+        gameObjects.forEach((gameObject) -> {
+            gameObject.start();
+        });
+        
         while (running) {
             gameLoop();
         }

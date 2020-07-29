@@ -5,6 +5,7 @@
  */
 package components;
 
+import engine.RenderEngine;
 import java.awt.image.BufferedImage;
 
 /**
@@ -12,10 +13,16 @@ import java.awt.image.BufferedImage;
  * @author Fraz
  */
 public class GameObject {
-    private SpriteRenderer spriteRenderer = null;
+    
+    private RenderEngine owner;
+    protected SpriteRenderer spriteRenderer = null;
     private int x = 0;
     private int y = 0;
-        
+    
+    public final void setEngine(RenderEngine engine) {
+        owner = engine;
+    }
+    
     public final void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
@@ -30,12 +37,22 @@ public class GameObject {
     }
 
     public final BufferedImage getSprite() {
-        return spriteRenderer.getSprite();
+        if (spriteRenderer != null) {
+            return spriteRenderer.getSprite();
+        } else {
+            return null;
+        }
     } 
     
     public final void setSpriteRenderer(SpriteRenderer spriteRenderer) {
         this.spriteRenderer = spriteRenderer;
     }
+    
+    public final KeyReader getKeyReaderFromEngine() {
+        return owner.getKeyReader();
+    }
+    
+    public void start() {}
     
     public void update() {}
     

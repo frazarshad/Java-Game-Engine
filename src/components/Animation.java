@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
  *
  * @author Fraz
  */
-public class Animation {
+public final class Animation {
 
     private BufferedImage[] sprites;
     
@@ -24,9 +24,15 @@ public class Animation {
     private long deltaTime;
 
     public Animation(String... spriteLocations) {
-        speed = 1000;
+        speed = 500;
         lastTime =  System.currentTimeMillis();
-        setAnimationSprites(spriteLocations);
+        this.setAnimationSprites(spriteLocations);
+    }
+    
+    public Animation(int speed, String... spriteLocations) {
+        this.speed = speed;
+        lastTime =  System.currentTimeMillis();
+        this.setAnimationSprites(spriteLocations);    
     }
     
     public void setSpeed(int time) {

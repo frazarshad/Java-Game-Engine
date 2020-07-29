@@ -6,31 +6,43 @@
 package components;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 
 /**
  *
  * @author Fraz
  */
-public class AnimationController implements SpriteRenderer{
+public final class AnimationController implements SpriteRenderer{
     
     private Animation currentAnimation = null;
-    private ArrayList animations;
+    private HashMap<String, Animation> animations;
 
     public AnimationController() {
-        animations = new ArrayList();
+        animations = new HashMap<>();
     }
     
-    public void addAnimation(Animation animation) {
+    public void addAnimation(String name, Animation animation) {
         if (currentAnimation == null) {
             currentAnimation = animation;
         }
-        animations.add(animation);
+        animations.put(name, animation);
     }
     
     @Override
     public BufferedImage getSprite() {
-        return currentAnimation.getSprite();
+        if (currentAnimation != null) {
+            return currentAnimation.getSprite();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void changeAnimation(String animationName) {
+        if (animations.containsKey(animationName)) {
+            currentAnimation = animations.get(animationName); 
+        }
     }
     
     

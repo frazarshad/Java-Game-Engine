@@ -13,4 +13,7 @@ import java.awt.image.BufferedImage;
  */
 public interface SpriteRenderer {
     public BufferedImage getSprite(); 
+    public void changeAnimation(String animationName);
+
 }
+

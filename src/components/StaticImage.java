@@ -16,7 +16,7 @@ import javax.imageio.ImageIO;
  */
 public class StaticImage implements SpriteRenderer {
 
-    private BufferedImage sprite;
+    private BufferedImage sprite = null;
 
     public StaticImage(String location) {
         try {
@@ -30,4 +30,12 @@ public class StaticImage implements SpriteRenderer {
     public BufferedImage getSprite() {
         return sprite;
     }
+
+    @Override
+    public void changeAnimation(String animationName) {
+        throw new UnsupportedOperationException("Not supported In Static Image."
+                + "use Animation Controller instead.");
+    }
+    
+    
 }
