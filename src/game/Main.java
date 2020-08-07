@@ -24,39 +24,18 @@ public class Main {
         RenderEngine engine = RenderEngine.createEngine();
 
         // Background
-        GameObject background = new GameObject();
-        background.setSpriteRenderer(
-                new StaticImage("background.png")
-        );
-        background.setLocation(0, 0);
+        GameObject background = new Background();
         engine.addGameObject(background);
         // --------------------------------
         
         
         // Player Object
         GameObject obj = new Player();
-        AnimationController controller = new AnimationController();
-        controller.addAnimation(
-                "main",
-                new Animation(
-                        "test1.png",
-                        "test2.png",
-                        "test3.png"
-                )
-        );
-        controller.addAnimation(
-                "second",
-                new Animation(
-                        4,
-                        "test1.png",
-                        "test2.png",
-                        "test3.png"
-                )
-        );
-        obj.setSpriteRenderer(controller);
-        obj.setLocation(400, 300);
         engine.addGameObject(obj);
         // ----------------------------------
+        
+        GameObject box = new Box();
+        engine.addGameObject(box);
         
 //
 //        SwingUtilities.invokeLater(new Runnable() {

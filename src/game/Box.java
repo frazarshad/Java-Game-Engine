@@ -5,21 +5,18 @@
  */
 package game;
 
+import components.Collider;
 import components.GameObject;
-import components.StaticImage;
 
 /**
  *
  * @author Fraz
  */
-public class Background extends GameObject {
+public class Box extends GameObject {
 
     @Override
     public void start() {
-        this.setSpriteRenderer(
-                new StaticImage("background.png")
-        );
-        this.setLocation(0, 0);
+        this.addCollider(new Collider(40, 40));
     }
-
+    
 }

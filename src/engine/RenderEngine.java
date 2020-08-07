@@ -5,6 +5,7 @@
  */
 package engine;
 
+import components.Collider;
 import components.GameObject;
 import components.KeyReader;
 import debugtools.FrameRate;
@@ -38,6 +39,7 @@ public final class RenderEngine extends JFrame implements Runnable {
                                         // gameobjects that are to be rendered
     private KeyReader keyReader;
     
+    
     public static RenderEngine createEngine() {
         if (self == null) {
             self = new RenderEngine();
@@ -61,7 +63,6 @@ public final class RenderEngine extends JFrame implements Runnable {
     }
 
     public void addGameObject(GameObject obj) {
-        obj.setEngine(this);
         gameObjects.add(obj);
     }
 
@@ -95,28 +96,13 @@ public final class RenderEngine extends JFrame implements Runnable {
         // Adding in the keylistener
         keyReader = KeyReader.createKeyReader();
         this.addKeyListener(keyReader);
+        canvas.addKeyListener(keyReader);
         
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    private void render(Graphics graphics) {
-        Graphics2D graphics2d = (Graphics2D) graphics;
-        gameObjects.forEach((gameObject) -> {
-            gameObject.update(); // Running update before drawing each frame
-            graphics2d.drawImage(
-                    gameObject.getSprite(),
-                    gameObject.getX(),
-                    gameObject.getY(),
-                    this
-            );
-        });
-        
-        if (debugEnabled) {
-            frameRate.drawFrameRate(graphics);
-        }
-    }
-
+    
     @Override
     public void run() {
         running = true;
@@ -152,4 +138,65 @@ public final class RenderEngine extends JFrame implements Runnable {
             buffer.show();
         } while (buffer.contentsLost());
     }
+    
+    private void render(Graphics graphics) {
+        Graphics2D graphics2d = (Graphics2D) graphics;
+        
+        
+        // This entire block is the collision check algorithm. basic n^2 comparison
+        gameObjects.forEach((gameObject) -> {
+            Collider gameObjectCollider = gameObject.getCollider();
+            if (gameObjectCollider != null && !gameObjectCollider.isStatic()) {
+                
+                gameObjects.forEach((secondGameObject) -> {    
+                    Collider possibleCollider = secondGameObject.getCollider();
+                    if (possibleCollider != null && 
+                        gameObjectCollider != possibleCollider && 
+                        !possibleCollider.isStatic()) {
+
+                        if (gameObjectCollider.checkCollision(possibleCollider)) {
+                            
+                        }
+                    }
+                });
+            }
+        });
+        
+        gameObjects.forEach((gameObject) -> {
+            gameObject.update(); // Running update before drawing each frame
+            graphics2d.drawImage(
+                    gameObject.getSprite(),
+                    gameObject.getX(),
+                    gameObject.getY(),
+                    this
+            );
+            
+            // Key Press Actions
+            if (keyReader.isPressed()) {
+                gameObject.onKeyPressed(keyReader.currentPressedKey());
+            }
+            
+            if (debugEnabled) {
+                Collider col = gameObject.getCollider();
+                if (col != null) {
+                    if (col.isColliding())
+                        graphics2d.setColor(Color.red);
+                    else
+                        graphics2d.setColor(Color.blue);
+
+                    graphics2d.drawRect(
+                            col.getAbsoluteX(), 
+                            col.getAbsoluteY(),
+                            col.getWidth(), 
+                            col.getHeight()
+                    );
+                }
+            }
+        });
+        
+        if (debugEnabled) {
+            frameRate.drawFrameRate(graphics);
+        }
+    }
+
 }

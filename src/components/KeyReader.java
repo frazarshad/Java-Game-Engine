@@ -16,7 +16,8 @@ public class KeyReader implements KeyListener{
 
     private static KeyReader INSTANCE = null;
     
-    KeyEvent typed;
+    boolean prevPressed = false;
+    boolean currentPressed = false;
     KeyEvent pressed = null;
     
     private KeyReader() {}
@@ -35,31 +36,45 @@ public class KeyReader implements KeyListener{
     
     @Override
     public void keyTyped(KeyEvent e) {
+//        System.out.println("TYPED");
   //      System.out.println("PRESS");
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        
+//        System.out.println("PRESSED");
         pressed = e;
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        
+        System.out.println("RELEASED");
         pressed = null;
     }
     
+    public boolean isPressed() {
+        if (pressed == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     
-    public KeyEvent currentPressed() {
+    public KeyEvent currentPressedKey() {
         return pressed;
     }
+
+   // public 
     
-    public int currentPressedKey() {
-        if (pressed != null) {
-            return pressed.getKeyCode();
-        } else {
-            return -1;
-        }
-        
-    }
+//    public int currentPressedKey() {
+//        if (pressed != null) {
+//            return pressed.getKeyCode();
+//        } else {
+//            return -1;
+//        }
+//        
+//    }
     
 }
