@@ -21,8 +21,8 @@ public class Main {
         RenderEngine engine = RenderEngine.createEngine();
         
         // Background
-        GameObject background = new Background();
-        engine.addGameObject(background);
+//        GameObject background = new Background();
+//        engine.addGameObject(background);
         // --------------------------------
         
         // Adding BorderBlocks
