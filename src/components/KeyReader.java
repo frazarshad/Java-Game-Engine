@@ -20,7 +20,10 @@ public class KeyReader implements KeyListener{
     boolean currentPressed = false;
     KeyEvent pressed = null;
     
-    private KeyReader() {}
+    // Single frame key down
+    boolean keyPressedDown = false;
+    boolean keyPressable = true;
+    
     
     public static KeyReader createKeyReader() {
         if (INSTANCE == null) {
@@ -35,23 +38,26 @@ public class KeyReader implements KeyListener{
     }
     
     @Override
-    public void keyTyped(KeyEvent e) {
-//        System.out.println("TYPED");
-  //      System.out.println("PRESS");
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
-        
-//        System.out.println("PRESSED");
         pressed = e;
+     
+        if (keyPressable) {
+            keyPressedDown = true;
+            keyPressable = false;
+        }
     }
-
+    
     @Override
     public void keyReleased(KeyEvent e) {
-        
-        System.out.println("RELEASED");
+        keyPressable = true;
         pressed = null;
+    }
+    
+    public void setPressOff() {
+        keyPressedDown = false;
     }
     
     public boolean isPressed() {
@@ -62,19 +68,16 @@ public class KeyReader implements KeyListener{
         }
     }
     
+    public boolean isPressedOnThisFrame() {
+        return keyPressedDown;
+    }
+    
+//    public boolean isReleasedOnThisFrame() {
+//        return keyPressedDown;
+//    }
+    
     public KeyEvent currentPressedKey() {
         return pressed;
     }
 
-   // public 
-    
-//    public int currentPressedKey() {
-//        if (pressed != null) {
-//            return pressed.getKeyCode();
-//        } else {
-//            return -1;
-//        }
-//        
-//    }
-    
 }

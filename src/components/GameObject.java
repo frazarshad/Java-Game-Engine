@@ -5,10 +5,10 @@
  */
 package components;
 
+import engine.RenderEngine;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import util.Pair;
 
 /**
  *
@@ -16,30 +16,46 @@ import util.Pair;
  */
 public class GameObject {
     
-    protected SpriteRenderer spriteRenderer = null;
-    protected Collider collider = null;
-    protected Pair position;
+    private SpriteRenderer spriteRenderer = null;
+    private Collider collider = null;
+    private AudioController audioController = null;
+    private Translate translate;
+    private RenderEngine owner;
+    
     
     public GameObject () {
-        position = new Pair(0, 0);
+        translate = new Translate(0, 0);
     }
     
     public GameObject (int x, int y) {
-        position = new Pair(x, y);
+        translate = new Translate(x, y);
     }
     
-    public final void setLocation(int x, int y) {
-        position.setPair(x, y);
+    public void setOwner(RenderEngine e) {
+        this.owner = e;
+    } 
+    
+    public RenderEngine getRenderEngine () {
+        return owner;
+    }
+    
+    public final void move(int x, int y) {
+        if (!(collider != null && collider.isColliding()))
+            translate.getPosition().setPair(x, y);
     }
     
     public final int getX() {
-        return position.getFirst();
+        return translate.getPosition().getFirst();
     }
     
     public final int getY() {
-        return position.getSecond();
+        return translate.getPosition().getSecond();
     }
 
+    public void setLocation (int x, int y) {
+        translate.setLocation(x, y);
+    }
+    
     public final BufferedImage getSprite() {
         if (spriteRenderer != null) {
             return spriteRenderer.getSprite();
@@ -51,14 +67,34 @@ public class GameObject {
     public final void setSpriteRenderer(SpriteRenderer spriteRenderer) {
         this.spriteRenderer = spriteRenderer;
     }
+
+    public SpriteRenderer getSpriteRenderer() {
+        return spriteRenderer;
+    }
     
     public final void addCollider(Collider collider) {
         this.collider = collider;
         this.collider.setOwner(this);
     }
     
+    public final void addAudioController(AudioController audioController) {
+        this.audioController = audioController;
+    }
+
+    public AudioController getAudioController() {
+        return audioController;
+    }
+    
+    public final Translate getTranslate() {
+        return translate;
+    }
+    
     public final Collider getCollider() {
         return collider;
+    }
+    
+    public void delete() {
+        owner.addToDeleteList(this);
     }
     
     public void start() {}
@@ -70,4 +106,6 @@ public class GameObject {
     public void onKeyDown (KeyEvent e) {}
     
     public void onKeyPressed (KeyEvent e) {}
+    
+    public void onCollision (GameObject collision) {}
 }

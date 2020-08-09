@@ -13,9 +13,11 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import util.Pair;
 
 /**
  *
@@ -28,9 +30,11 @@ public final class RenderEngine extends JFrame implements Runnable {
     private boolean running;
     private BufferStrategy buffer;
     private Thread gameThread;
+    private Pair size;
+    private ArrayList<GameObject> toDelete;
     
     // Varaible to manage debugging tools
-    private boolean debugEnabled = true; // Let the end user configure this 
+    private boolean debugEnabled = false; // Let the end user configure this 
                                         // during runtime
     private FrameRate frameRate;
 
@@ -51,6 +55,8 @@ public final class RenderEngine extends JFrame implements Runnable {
     
     private RenderEngine() {
         gameObjects = new ArrayList<>();
+        toDelete = new ArrayList<>();
+        size = new Pair(640, 480);
         
         if (debugEnabled) {
             frameRate = new FrameRate();
@@ -64,20 +70,25 @@ public final class RenderEngine extends JFrame implements Runnable {
 
     public void addGameObject(GameObject obj) {
         gameObjects.add(obj);
+        obj.setOwner(this);
     }
 
+    public void addToDeleteList(GameObject g) {
+        toDelete.add(g);
+    }
+    
     public void setDebug(boolean val) {
         this.debugEnabled = val;
     }
     
-    public KeyReader getKeyReader() {
-        return keyReader;
+    public void setSize(int x, int y) {
+        size.setPair(x, y);
     }
     
     public void setUpEngine() {
 
         Canvas canvas = new Canvas();
-        canvas.setSize(320, 240);
+        canvas.setSize(size.getFirst(), size.getSecond());
         canvas.setBackground(Color.white);
         canvas.setIgnoreRepaint(true);
         
@@ -89,7 +100,7 @@ public final class RenderEngine extends JFrame implements Runnable {
 
         this.setTitle("Game");
         this.setIgnoreRepaint(true);
-        this.setSize(640, 480);
+        this.setSize(size.getSecond(), size.getSecond());
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -142,21 +153,22 @@ public final class RenderEngine extends JFrame implements Runnable {
     private void render(Graphics graphics) {
         Graphics2D graphics2d = (Graphics2D) graphics;
         
-        
         // This entire block is the collision check algorithm. basic n^2 comparison
         gameObjects.forEach((gameObject) -> {
+            Collider col = gameObject.getCollider();
+            if (col != null)
+                col.setColliding(false);
+        });
+        
+        gameObjects.forEach((gameObject) -> {
             Collider gameObjectCollider = gameObject.getCollider();
-            if (gameObjectCollider != null && !gameObjectCollider.isStatic()) {
-                
+            if (gameObjectCollider != null && !gameObjectCollider.isStatic()) {                
                 gameObjects.forEach((secondGameObject) -> {    
                     Collider possibleCollider = secondGameObject.getCollider();
                     if (possibleCollider != null && 
-                        gameObjectCollider != possibleCollider && 
-                        !possibleCollider.isStatic()) {
-
-                        if (gameObjectCollider.checkCollision(possibleCollider)) {
+                        gameObjectCollider != possibleCollider) {
+                        gameObjectCollider.checkCollision(possibleCollider);
                             
-                        }
                     }
                 });
             }
@@ -175,7 +187,11 @@ public final class RenderEngine extends JFrame implements Runnable {
             if (keyReader.isPressed()) {
                 gameObject.onKeyPressed(keyReader.currentPressedKey());
             }
-            
+            if (keyReader.isPressedOnThisFrame()) {
+                gameObject.onKeyDown(keyReader.currentPressedKey());
+            }
+                
+            // Debug draw for colliders
             if (debugEnabled) {
                 Collider col = gameObject.getCollider();
                 if (col != null) {
@@ -193,10 +209,22 @@ public final class RenderEngine extends JFrame implements Runnable {
                 }
             }
         });
+        keyReader.setPressOff(); //A botch to keep the keydown event run for
+                                   // a single frame
         
         if (debugEnabled) {
             frameRate.drawFrameRate(graphics);
         }
+        
+        if (!toDelete.isEmpty()) {
+            toDelete.forEach((obj) -> {
+                gameObjects.remove(obj);
+            });
+            toDelete.clear();
+        }
     }
 
+    public void stop () {
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
 }

@@ -17,25 +17,47 @@ public class Collider {
     private Pair offset;
     private Pair dimensions;
     private boolean colliding = false;
-    private boolean static_ = false;
+    private boolean static_;
+    private boolean solid_;
     
     public Collider () {
         offset = new Pair(0, 0);
         dimensions = new Pair(0, 0);
+        static_ = false;
+        solid_ = true;
     }
     
     public Collider (int length, int width) {
         offset = new Pair(0, 0);
         dimensions = new Pair(length, width);
+        static_ = false;
+        solid_ = true;
     }
-    
-    public void setOwner (GameObject owner) {
-        this.owner = owner;
+
+    public Collider (int length, int width, boolean isStatic, boolean isSolid) {
+        offset = new Pair(0, 0);
+        dimensions = new Pair(length, width);
+        static_ = isStatic;
+        solid_ = isSolid;
     }
     
     public Collider (int length, int width, int offsetX, int offsetY) {
         offset = new Pair(offsetX, offsetY);
         dimensions = new Pair(length, width);
+        static_ = false;
+        solid_ = true;
+    }
+    
+    public Collider (int length, int width, int offsetX, int offsetY,
+                        boolean isStatic, boolean isSolid) {
+        offset = new Pair(offsetX, offsetY);
+        dimensions = new Pair(length, width);
+        static_ = isStatic;
+        solid_ = isSolid;
+    }
+    
+    public void setOwner (GameObject owner) {
+        this.owner = owner;
     }
     
     public final int getOffsetX() {
@@ -81,10 +103,16 @@ public class Collider {
                     this.getAbsoluteY() + this.getHeight() >= targ.getAbsoluteY() &&
                     targ.getAbsoluteY() + targ.getHeight() >= this.getAbsoluteY() 
                 )
-           )
-            colliding = true;
-        else
-            colliding = false;
+           ) {
+            this.colliding = true;
+            targ.colliding = true;
+            
+            this.owner.onCollision(targ.owner);
+            targ.owner.onCollision(this.owner);
+            
+            if (this.solid_ && targ.solid_)
+                owner.getTranslate().setPreviousPosition();
+        }
         
         return colliding;
     }
@@ -92,4 +120,8 @@ public class Collider {
     public final boolean isColliding() {
         return colliding;
     }
+    
+    public final void setColliding(boolean val) {
+        colliding = val;
+    } 
 }

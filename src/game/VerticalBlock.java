@@ -7,16 +7,22 @@ package game;
 
 import components.Collider;
 import components.GameObject;
+import components.StaticImage;
 
 /**
  *
  * @author Fraz
  */
-public class Box extends GameObject {
+public class VerticalBlock extends GameObject {
+
+    public VerticalBlock(int x, int y) {
+        this.setLocation(x, y);
+    }
 
     @Override
     public void start() {
-        this.addCollider(new Collider(40, 40));
+        this.addCollider(new Collider(20, 400, true, true));
+        this.setSpriteRenderer(new StaticImage("pacman/block.png"));
     }
-    
+
 }

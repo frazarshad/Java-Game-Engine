@@ -5,7 +5,7 @@
  */
 package game;
 
-import components.AudioController;
+import components.Collider;
 import components.GameObject;
 import components.StaticImage;
 
@@ -13,18 +13,16 @@ import components.StaticImage;
  *
  * @author Fraz
  */
-public class Background extends GameObject {
+public class HorizontalBlock extends GameObject {
 
-    @Override
-    public void start() {
-        
-        this.setSpriteRenderer(
-                new StaticImage("background.png")
-        );
-        this.setLocation(0, 0);
-        
+    public HorizontalBlock(int x, int y) {
+        this.setLocation(x, y);
     }
     
+    @Override
+    public void start() {
+        this.addCollider(new Collider(400, 20, true, true));
+        this.setSpriteRenderer(new StaticImage("pacman/block2.png"));
+    }
     
-
 }

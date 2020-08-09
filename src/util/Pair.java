@@ -38,6 +38,10 @@ public class Pair {
     public final void setPair(int first, int second) {
         this.second = second;
         this.first = first;
-
+    }
+    
+    public final void setPair(Pair pair) {
+        this.second = pair.second;
+        this.first = pair.first;
     }
 }

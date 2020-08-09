@@ -7,9 +7,9 @@ package game;
 
 import components.Animation;
 import components.AnimationController;
+import components.AudioController;
 import components.Collider;
 import components.GameObject;
-import components.KeyReader;
 import java.awt.event.KeyEvent;
 
 /**
@@ -43,34 +43,40 @@ public class Player extends GameObject {
         this.setSpriteRenderer(controller);
         this.setLocation(400, 300);
         
-        addCollider(new Collider(40, 40));
-    }
-    
-    @Override
-    public void update() {
+        AudioController audio = new AudioController();
+        audio.addAudio("jump", "sound.wav");
         
+        this.addAudioController(audio);
+        this.addCollider(new Collider(40, 40, false, true));
     }
     
     @Override
     public void onKeyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                spriteRenderer.changeAnimation("main");
+                this.getSpriteRenderer().changeAnimation("main");
                 this.setLocation(this.getX(), this.getY() - speed);
                 break;
             case KeyEvent.VK_DOWN:
-                spriteRenderer.changeAnimation("main");
+                this.getSpriteRenderer().changeAnimation("main");
                 this.setLocation(this.getX(), this.getY() + speed);
                 break;
             case KeyEvent.VK_LEFT:
-                spriteRenderer.changeAnimation("second");
+                this.getSpriteRenderer().changeAnimation("second");
                 this.setLocation(this.getX() - speed, this.getY());
                 break;
             case KeyEvent.VK_RIGHT:
-                spriteRenderer.changeAnimation("second");
+                this.getSpriteRenderer().changeAnimation("second");
                 this.setLocation(this.getX() + speed, this.getY());
                 break;
         }
     }
+
+    @Override
+    public void onKeyDown(KeyEvent e) {
+            this.getAudioController().playOnce("jump");
+    }
+    
+    
     
 }
